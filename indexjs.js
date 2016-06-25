@@ -31,7 +31,7 @@ function setAll(a, v) {
 }
 function newGame()
 {
-		document.getElementById("0").innerHTML = '';
+    document.getElementById("0").innerHTML = '';
     document.getElementById("1").innerHTML = '';
     document.getElementById("2").innerHTML = '';
     document.getElementById("3").innerHTML = '';
@@ -41,29 +41,29 @@ function newGame()
     document.getElementById("7").innerHTML = '';
     document.getElementById("8").innerHTML = '';
     turn = 0;
-		setAll(arrX,0);
+    setAll(arrX,0);
     setAll(arrO,0);
     count = 0;
 }
 
 function checkWin(arr,str)
 {
-		var winCombinations = [7,56,448,73,146,292,273,84];
+    var winCombinations = [7,56,448,73,146,292,273,84];
     if((arr[0] + arr[1] + arr[2] == 7) || (arr[3] + arr[4] + arr[5] == 56) ||
     (arr[6] + arr[7] + arr[8] == 448) || (arr[0] + arr[3] + arr[6] == 73) ||
     (arr[1] + arr[4] + arr[7] == 146) || (arr[2] + arr[5] + arr[8] == 292) ||
     (arr[0] + arr[4] + arr[8] == 273) || (arr[2] + arr[4] + arr[6] == 84))
     {
-    		alert (str);
+    	alert (str);
         newGame();
     }
 }
 
 function checkDraw()
 {
-		if (count == 9)
+    if (count == 9)
     {
-    		window.alert ("It's a tie!!");
+    	window.alert ("It's a tie!!");
         newGame();
     }
 }
