@@ -4,7 +4,8 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
 var usernames = {};
-var rooms = ['room1','room2','room3'];
+var rooms = ['room1'];
+var roomcount = 3;
 var turn = 0;
 var count = 0;
 
@@ -70,34 +71,35 @@ io.sockets.on('connection', function(socket) {
 	});
 
 	socket.on('changeValue', function(id){
-		//console.log('here');
-		//var userslist = roomSockets('room1');
-		//console.log(userslist);
-		//if(userslist.length < 2)
+		if(turn == 0)
 		{
-			if(turn == 0)
-			{
-				io.sockets.in('room1').emit('updategame', id, 'x');
-				count += 1;
-	    		arrX[id] = Math.pow(2,id);
-				checkWin(arrX,'X wins');
-	    		checkDraw();
-				turn = 1;
-			}
-			else 
-			{
-				io.sockets.in('room1').emit('updategame', id, 'o');
-				count += 1;
-	    		arrO[id] = Math.pow(2,id);
-				checkWin(arrO, 'O wins');
-	    		checkDraw();
-				turn = 0;
-			}
+			io.sockets.in('room1').emit('updategame', id, 'x');
+			count += 1;
+	    	arrX[id] = Math.pow(2,id);
+			checkWin(arrX,'X wins');
+	    	checkDraw();
+			turn = 1;
+		} else {
+			io.sockets.in('room1').emit('updategame', id, 'o');
+			count += 1;
+	    	arrO[id] = Math.pow(2,id);
+			checkWin(arrO, 'O wins');
+    		checkDraw();
+			turn = 0;
 		}
 	});
 
 	socket.on('startover', function(){
 		newGame();
+	});
+
+	socket.on('createNewRoom', function(){
+		roomcount++;
+		var e = "room" + roomcount;
+		rooms.push(e);
+		socket.emit('updateroomcount', e);
+		socket.broadcast.emit('updatechat', 'SERVER','Room has been created');
+		
 	});
 
 	function checkWin(arr,str)
@@ -108,7 +110,6 @@ io.sockets.on('connection', function(socket) {
 	    (arr[1] + arr[4] + arr[7] == 146) || (arr[2] + arr[5] + arr[8] == 292) ||
 	    (arr[0] + arr[4] + arr[8] == 273) || (arr[2] + arr[4] + arr[6] == 84))
 	    {
-	    	//socket.emit('onWin', str);
 	    	io.sockets.in('room1').emit('onWin', str);
 	        newGame();
 	    }
@@ -119,7 +120,6 @@ io.sockets.on('connection', function(socket) {
 		var str = "It's a tie!";
 		if (count == 9)
 	    {
-	    	//socket.emit('onTie', str);
 	    	io.sockets.in('room1').emit('onTie', str);
 	        newGame();
 	    }
@@ -139,17 +139,6 @@ io.sockets.on('connection', function(socket) {
 	    setAll(arrO,0);
 	    count = 0;
 	}
-
-	/*
-	function roomSockets(roomId) {
-    var clients = io.sockets.adapter.rooms[roomId],
-        sockets = [];
-    for (var clientId in clients) sockets.push(io.sockets.connected[clientId]);
-    	console.log(sockets);
-    return sockets;
-}
-*/
-	
 });
 
 
