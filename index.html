@@ -1,0 +1,57 @@
+<!doctype html>  
+<html lang="en">  
+    <head>
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+        <script src="indexjs.js"></script>
+        <link rel="stylesheet" type="text/css" href="mycss.css"></link>
+    </head>
+    <body>
+        <h1> TIC TAC TOE </h1>
+        <br>
+        <div id="parent_div_1">
+            <div id="parent_div_2">
+                <div id="child_div_1">
+                    <h3> ROOMS </h3>
+                    <div id="rooms">
+                    </div>
+                </div>
+                <div id="child_div_2">
+                    <div id="conversation">
+                    </div>
+                        <input id="data" />
+                        <button class = "center button" id="datasend" > SEND </button>
+                </div>
+            </div>
+            <div id="parent_div_3">
+                <div id="board-outer" class="center">
+                    <table id="board">
+                        <tr class="row">
+                            <td id="0" onclick = change(this.id)></td>
+                            <td id="1" onclick = change(this.id)></td>
+                            <td id="2" onclick = change(this.id)></td>
+                        </tr>
+                        <tr class="row">
+                            <td id="3" onclick = change(this.id)></td>
+                            <td id="4" onclick = change(this.id)></td>
+                            <td id="5" onclick = change(this.id)></td>
+                        </tr>
+                        <tr class="row">
+                            <td id="6" onclick = change(this.id)></td>
+                            <td id="7" onclick = change(this.id)></td>
+                            <td id="8" onclick = change(this.id)></td>
+                        </tr>
+                    </table>
+                </div>
+                <br>
+                <br>
+                <br>
+                <div class="center button">
+                    <button id="createroom" onclick= createroom() >Create Room</button>
+                    <button id="restart" onclick = startnew() >New game</button>
+                </div>
+            </div>
+        </div>   
+        </body>
+</html>  
