@@ -5,7 +5,7 @@ var io = require('socket.io')(server);
 
 var usernames = {};
 var rooms = ['room1'];
-var roomcount = 3;
+var roomcount = 1;
 var turn = 0;
 var count = 0;
 
@@ -73,14 +73,14 @@ io.sockets.on('connection', function(socket) {
 	socket.on('changeValue', function(id){
 		if(turn == 0)
 		{
-			io.sockets.in('room1').emit('updategame', id, 'x');
+			io.sockets.in(socket.room).emit('updategame', id, 'x');
 			count += 1;
 	    	arrX[id] = Math.pow(2,id);
 			checkWin(arrX,'X wins');
 	    	checkDraw();
 			turn = 1;
 		} else {
-			io.sockets.in('room1').emit('updategame', id, 'o');
+			io.sockets.in(socket.room).emit('updategame', id, 'o');
 			count += 1;
 	    	arrO[id] = Math.pow(2,id);
 			checkWin(arrO, 'O wins');
@@ -97,8 +97,8 @@ io.sockets.on('connection', function(socket) {
 		roomcount++;
 		var e = "room" + roomcount;
 		rooms.push(e);
-		socket.emit('updateroomcount', e);
-		socket.broadcast.emit('updatechat', 'SERVER','Room has been created');
+		io.sockets.emit('updateroomcount', e);
+		io.sockets.emit('updatechat', 'SERVER', e + ' has been created');
 		
 	});
 
@@ -110,7 +110,7 @@ io.sockets.on('connection', function(socket) {
 	    (arr[1] + arr[4] + arr[7] == 146) || (arr[2] + arr[5] + arr[8] == 292) ||
 	    (arr[0] + arr[4] + arr[8] == 273) || (arr[2] + arr[4] + arr[6] == 84))
 	    {
-	    	io.sockets.in('room1').emit('onWin', str);
+	    	io.sockets.in(socket.room).emit('onWin', str);
 	        newGame();
 	    }
 	}
@@ -120,7 +120,7 @@ io.sockets.on('connection', function(socket) {
 		var str = "It's a tie!";
 		if (count == 9)
 	    {
-	    	io.sockets.in('room1').emit('onTie', str);
+	    	io.sockets.in(socket.room).emit('onTie', str);
 	        newGame();
 	    }
 	}
@@ -133,7 +133,7 @@ io.sockets.on('connection', function(socket) {
 	}
 	function newGame()
 	{
-	    io.sockets.in('room1').emit('restartgame');
+	    io.sockets.in(socket.room).emit('restartgame');
 	    turn = 0;
 		setAll(arrX,0);
 	    setAll(arrO,0);
