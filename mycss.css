@@ -47,6 +47,10 @@ a:link {
 
 }
 
+a:active {
+    background-color: #B9E9F0;
+}
+
 .selected {
     background-color: #B9E9F0;
     color: black;
