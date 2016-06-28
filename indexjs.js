@@ -19,8 +19,6 @@ socket.on('updaterooms', function(rooms, current_room) {
     //alert(current_room.id);
     $('#rooms').empty();
     $.each(rooms, function(key, value) {
-           //alert(value.id);
-           //alert(current_room.id); 
         if(value.id == current_room.id){
             $('#rooms').append('<div><a href="#" class="selected">' + value.id + '</a></div>');
         } 
@@ -30,30 +28,27 @@ socket.on('updaterooms', function(rooms, current_room) {
     });
 });
 
+//Updates room count whenever new Room is created
 socket.on('updateRoomCount', function(value){
     $('#rooms').append('<div><a href="#" onclick="switchRoom(\''+ value.id +'\')">' + value.id + '</a></div>');
 });
 
+//This module reflects the changes made to the game on the screen
 socket.on('updategame', function (id, v) {
-    //alert(id);
     $('#'+id).text(v);
 });
 
-
+//Alerts when there is a win 
 socket.on('onWin', function (who){
     window.alert(who);
 });
 
+//Alerts when there is a tie
 socket.on('onTie', function (res){
     window.alert(res);
 });
 
-socket.on('restartgame', function(){
-    for ( var i = 0; i < 9; i++){
-        $('#'+i).text('');
-    }
-});
-
+//Refreshes client board whenever he enters a new room
 socket.on('refreshGame', function(room){
     for ( var i = 0; i < 9; i++){
         $('#'+i).text('');
@@ -67,6 +62,8 @@ socket.on('refreshGame', function(room){
 });
 
 $(function(){
+
+    //Sends data in textbox when SEND button is clicked
     $('#datasend').click( function() {
         
         var message = $('#data').val();
@@ -74,12 +71,15 @@ $(function(){
         socket.emit('sendchat', message );
     });
 
+    //Executes when textbox character count exceeds 13
     $('#data').keypress(function(e) {
         if(e.which == 13) {
             $(this).blur();
             $('#datasend').focus().click();
         }
     });
+
+    //Used to scroll the chatbox to the latest message sent
     $('#conversation').each(function(i, value){
         height += parseInt($(this).height());
     });
@@ -87,18 +87,22 @@ $(function(){
 
 });
 
+//Invoked whenever a box on the board is clicked
 function change(id){
     socket.emit('changeValue', id, clientname);
 }
 
+//Refreshes page when new game button is clicked
 function startnew(){
     location.reload();
 }
 
+//Calls createNweRoom function in the server
 function createRoom(){
     socket.emit('createNewRoom');
 }
 
+//Calls switchRoom function in the server
 function switchRoom(roomid){
     socket.emit('switchRoom',roomid, clientname);
 }
